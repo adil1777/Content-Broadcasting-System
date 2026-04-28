@@ -20,57 +20,57 @@ const createUsersTable = async () => {
   }
 };
 
-// const createUser = async (name, email, password, role) => {
-//   const hashedPassword = await bcrypt.hash(password, 10);
-//   const connection = await pool.getConnection();
-//   try {
-//     await connection.query(
-//       "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)",
-//       [name, email, hashedPassword, role]
-//     );
-//   } finally {
-//     connection.release();
-//   }
-// };
+const createUser = async (name, email, password, role) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const connection = await pool.getConnection();
+  try {
+    await connection.query(
+      "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)",
+      [name, email, hashedPassword, role]
+    );
+  } finally {
+    connection.release();
+  }
+};
 
-// const getUserByEmail = async (email) => {
-//   const connection = await pool.getConnection();
-//   try {
-//     const [rows] = await connection.query(
-//       "SELECT * FROM users WHERE email = ?",
-//       [email]
-//     );
-//     return rows.length > 0 ? rows[0] : null;
-//   } finally {
-//     connection.release();
-//   }
-// };
+const getUserByEmail = async (email) => {
+  const connection = await pool.getConnection();
+  try {
+    const [rows] = await connection.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+    return rows.length > 0 ? rows[0] : null;
+  } finally {
+    connection.release();
+  }
+};
 
-// const getUserById = async (id) => {
-//   const connection = await pool.getConnection();
-//   try {
-//     const [rows] = await connection.query(
-//       "SELECT * FROM users WHERE id = ?",
-//       [id]
-//     );
-//     return rows.length > 0 ? rows[0] : null;
-//   } finally {
-//     connection.release();
-//   }
-// };
+const getUserById = async (id) => {
+  const connection = await pool.getConnection();
+  try {
+    const [rows] = await connection.query(
+      "SELECT * FROM users WHERE id = ?",
+      [id]
+    );
+    return rows.length > 0 ? rows[0] : null;
+  } finally {
+    connection.release();
+  }
+};
 
-// const comparePassword = async (enteredPassword, hashedPassword) => {
-//   return await bcrypt.compare(enteredPassword, hashedPassword);
-// };
+const comparePassword = async (enteredPassword, hashedPassword) => {
+  return await bcrypt.compare(enteredPassword, hashedPassword);
+};
 
 const initUsers = async () => {
   await createUsersTable();
 };
 
 module.exports = {
-  // createUser,
-  // getUserByEmail,
-  // getUserById,
-  // comparePassword,
+  createUser,
+  getUserByEmail,
+  getUserById,
+  comparePassword,
   initUsers,
 };
