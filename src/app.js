@@ -45,6 +45,7 @@ app.get("/", async (req, res) => {
 
 
 //Routes
+app.use("/api/v1", require("./auths/auth.routers"));
 
 
 

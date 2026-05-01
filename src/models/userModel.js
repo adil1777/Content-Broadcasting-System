@@ -11,7 +11,7 @@ const createUsersTable = async () => {
         name VARCHAR(100) NOT NULL,
         email VARCHAR(150) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
-        role ENUM('teacher', 'principal') NOT NULL,
+        role ENUM('teacher', 'principal', 'student') DEFAULT 'student',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -25,7 +25,7 @@ const createUser = async (name, email, password, role) => {
   const connection = await pool.getConnection();
   try {
     await connection.query(
-      "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)",
+      "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
       [name, email, hashedPassword, role]
     );
   } finally {
