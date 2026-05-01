@@ -26,7 +26,7 @@ const createUser = async (name, email, password, role) => {
   try {
     await connection.query(
       "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
-      [name, email, hashedPassword, role]
+      [name, email, hashedPassword]
     );
   } finally {
     connection.release();
