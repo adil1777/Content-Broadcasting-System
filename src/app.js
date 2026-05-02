@@ -4,45 +4,18 @@ const colors = require("colors");
 const cors = require("cors");
 const morgan= require('morgan');
 const configServer = require("./config/configServer");
-const pool = require("../src/config/database");
+const connectDB = require("./config/dbConnection");
 
 dotenv.config();
 const app = express();
-app.use(cors());
 
-
-//MySQL  Connection
-pool.getConnection();
-
-const {initUsers} = require("../src/models/userModel");
-const  {initContents} = require("../src/models/contentModel");
-const  {initSlots} =  require("../src/models/contentSlotsModel");
-const  {initSchedules} = require("../src/models/contentScheduleModel");
-
-
-//middleware 
+// Middleware
 app.use(express.json());
-app.use(morgan("dev"));
 app.use(cors());
-
-// // Initialize tables
-const initializeTables = async () => {
-   await initUsers();
-   await initContents();
-   await initSlots();
-   await initSchedules();
-  
-};
-
-initializeTables().then(() => {
-  console.log(`Database tables initialized`.bgGreen.bgWhite);
-}).catch((error) => {
-  console.error(`Error initializing database tables:, ${error}`.bgRed.bgWhite);
-});
+app.use(morgan("dev"));
 
 
-
-// Routes for testing
+// HEALTH CHECK API
 app.get("/", async (req, res) => {
   try {
     res.send("Hello Word");
@@ -56,9 +29,13 @@ app.get("/", async (req, res) => {
 app.use("/api/v1", require("./auths/auth.routers"));
 
 
-
-
 const PORT = configServer.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on Port ${PORT}`.bgGreen.white);
-});
+const startServer = async () => {
+  await connectDB(); // ✅ DB first
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`.bgGreen.white);
+  });
+};
+
+startServer();

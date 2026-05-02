@@ -17,7 +17,6 @@ const registerController = async (req, res) => {
 
 const loginController = async (req, res) => {
   try {
-    console.log("request body 333333333333",req.body);
     const response = await authService.login(req.body);
 
     return res.status(response.statusCode).json(response);

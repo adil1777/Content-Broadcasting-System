@@ -60,6 +60,3 @@ const initContents = async () => {
   await createContentTable();
 };
 
-module.exports = {
-  initContents
-};

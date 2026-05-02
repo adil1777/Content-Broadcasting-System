@@ -19,7 +19,3 @@ const createContentSlotsTable = async () => {
 const initSlots = async () => {
   await createContentSlotsTable();
 };
-
-module.exports = {
- initSlots
-};

@@ -73,5 +73,4 @@ module.exports = {
   getUserByEmail,
   getUserById,
   comparePassword,
-  initUsers,
 };

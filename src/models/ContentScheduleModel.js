@@ -36,6 +36,3 @@ const initSchedules = async () => {
   await createContentScheduleTable();
 };
 
-module.exports = {
-  initSchedules
-};
