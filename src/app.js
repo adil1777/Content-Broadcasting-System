@@ -26,7 +26,7 @@ app.get("/", async (req, res) => {
 
 
 //Routes
-app.use("/api/v1", require("./auths/auth.routers"));
+app.use("/api/v1", require("./routes/index"));
 
 
 const PORT = configServer.PORT || 3000;

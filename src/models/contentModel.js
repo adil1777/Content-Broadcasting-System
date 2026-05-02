@@ -60,3 +60,36 @@ const initContents = async () => {
   await createContentTable();
 };
 
+const createContent = async (data) => {
+  const connection = await pool.getConnection();
+
+  try {
+    const query = `
+      INSERT INTO content 
+      (title, subject, description, file_path, file_type, file_size, uploaded_by, start_time, end_time)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+      data.title,
+      data.subject,
+      data.description,
+      data.file_path,
+      data.file_type,
+      data.file_size,
+      data.uploaded_by,
+      data.start_time,
+      data.end_time
+    ];
+
+    await connection.query(query, values);
+
+  } finally {
+    connection.release();
+  }
+};
+
+module.exports = {
+  createContent
+};
+

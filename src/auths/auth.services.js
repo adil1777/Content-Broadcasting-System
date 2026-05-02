@@ -47,8 +47,8 @@ const login = async ({ email, password }) => {
       statusCode: statusCodes.UNAUTHORIZED,
     };
   }
-
-  const token = jwt.sign({ id: user.id }, serverConfig.JWT_SECRET, {
+  
+  const token = jwt.sign({ id: user.id, role: user.role }, serverConfig.JWT_SECRET, {
     expiresIn: "1d",
   });
 
