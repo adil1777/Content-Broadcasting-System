@@ -15,6 +15,10 @@ app.use(cors());
 pool.getConnection();
 
 const {initUsers} = require("../src/models/userModel");
+const  {initContents} = require("../src/models/contentModel");
+const  {initSlots} =  require("../src/models/contentSlotsModel");
+const  {initSchedules} = require("../src/models/contentScheduleModel");
+
 
 //middleware 
 app.use(express.json());
@@ -24,6 +28,10 @@ app.use(cors());
 // // Initialize tables
 const initializeTables = async () => {
    await initUsers();
+   await initContents();
+   await initSlots();
+   await initSchedules();
+  
 };
 
 initializeTables().then(() => {

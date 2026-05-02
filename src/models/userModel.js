@@ -12,7 +12,8 @@ const createUsersTable = async () => {
         email VARCHAR(150) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         role ENUM('teacher', 'principal', 'student') DEFAULT 'student',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
   } finally {

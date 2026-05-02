@@ -25,6 +25,8 @@ const register = async ({ name, email, password}) => {
 };
 
 const login = async ({ email, password }) => {
+  console.log("tttttt222222222222",email);
+  console.log("tttttttttttttttttt",password);
   const user = await userModel.getUserByEmail(email);
 
   if (!user) {
@@ -37,7 +39,7 @@ const login = async ({ email, password }) => {
 
   const passwordMatch = await userModel.comparePassword(
     password,
-    user.password
+    user.password_hash
   );
 
   if (!passwordMatch) {

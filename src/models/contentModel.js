@@ -1,49 +1,65 @@
-// const createContentTable = async () => {
-//   const connection = await pool.getConnection();
-//   try {
-//     await connection.query(`
-//       CREATE TABLE IF NOT EXISTS content (
-//         id INT AUTO_INCREMENT PRIMARY KEY,
+const pool = require("../config/database");
 
-//         title VARCHAR(255) NOT NULL,
-//         description TEXT,
-//         subject VARCHAR(50) NOT NULL,
+const createContentTable = async () => {
+  const connection = await pool.getConnection();
+  try {
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS content (
+        id INT AUTO_INCREMENT PRIMARY KEY,
 
-//         file_path VARCHAR(255) NOT NULL,
-//         file_type VARCHAR(50),
-//         file_size INT,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        subject VARCHAR(50) NOT NULL,
 
-//         uploaded_by INT NOT NULL,
+        file_path VARCHAR(255) NOT NULL,
+        file_type VARCHAR(50),
+        file_size INT,
 
-//         status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-//         rejection_reason TEXT,
+        uploaded_by INT NOT NULL,
 
-//         approved_by INT,
-//         approved_at TIMESTAMP NULL,
+        status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+        rejection_reason TEXT,
 
-//         start_time DATETIME,
-//         end_time DATETIME,
+        approved_by INT,
+        approved_at TIMESTAMP NULL,
 
-//         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        start_time DATETIME,
+        end_time DATETIME,
 
-//         CONSTRAINT fk_uploaded_by
-//           FOREIGN KEY (uploaded_by)
-//           REFERENCES users(id)
-//           ON DELETE CASCADE
-//           ON UPDATE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-//         CONSTRAINT fk_approved_by
-//           FOREIGN KEY (approved_by)
-//           REFERENCES users(id)
-//           ON DELETE SET NULL
-//           ON UPDATE CASCADE,
+        FOREIGN KEY (uploaded_by) REFERENCES users(id)
+          ON DELETE CASCADE,
 
-//         INDEX idx_uploaded_by (uploaded_by),
-//         INDEX idx_approved_by (approved_by),
-//         INDEX idx_status (status)
-//       )
-//     `);
-//   } finally {
-//     connection.release();
-//   }
-// };
+        FOREIGN KEY (approved_by) REFERENCES users(id)
+          ON DELETE SET NULL
+      )
+    `);
+
+    // safer index creation
+    await connection.query(`
+      CREATE INDEX  idx_uploaded_by ON content(uploaded_by)
+    `);
+
+    await connection.query(`
+      CREATE INDEX idx_status ON content(status)
+    `);
+
+    // 🔥 important combined index
+    await connection.query(`
+      CREATE INDEX idx_status_uploaded 
+      ON content(status, uploaded_by)
+    `);
+
+  } finally {
+    connection.release();
+  }
+};
+
+const initContents = async () => {
+  await createContentTable();
+};
+
+module.exports = {
+  initContents
+};
