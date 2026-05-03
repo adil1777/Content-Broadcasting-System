@@ -138,11 +138,38 @@ const updateContentStatus = async (id, data) => {
   }
 };
 
+//GET LIVE APPROVED CONTENT
+const getActiveApprovedContent = async (teacherId, now) => {
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows] = await connection.query(
+      `
+      SELECT c.*, cs.rotation_order, cs.duration
+      FROM content c
+      JOIN content_schedule cs ON c.id = cs.content_id
+      WHERE c.uploaded_by = ?
+        AND c.status = 'approved'
+        AND c.start_time IS NOT NULL
+        AND c.end_time IS NOT NULL
+        AND ? BETWEEN c.start_time AND c.end_time
+      `,
+      [teacherId, now]
+    );
+
+    return rows;
+
+  } finally {
+    connection.release();
+  }
+};
+
 module.exports = {
   createContent,
   getAllContent,
   getContentByStatus,
-  updateContentStatus
+  updateContentStatus,
+  getActiveApprovedContent
 };
 
 

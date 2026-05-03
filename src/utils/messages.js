@@ -17,7 +17,8 @@ const messages = {
   CONTENT_APPROVED:"Content approved successfully",
   CONTENT_REJECTED:"Content rejected successfully",
   REJECTION_REASON_REQUIRED :"Rejection reason required",
-  REJECTED_REASON_REQUIRED:"Rejected reason is required"
+  REJECTED_REASON_REQUIRED:"Rejected reason is required",
+  CONTENT_NOT_AVAILABLE :"No content available"
   
 };
 

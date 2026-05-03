@@ -139,10 +139,82 @@ const rejectContent = async (contentId, principalId, reason) => {
    }
 };
 
+//GET LIVE APPROVED CONTENT 
+const getLiveContent = async (teacherId) => {
+  try{
+      const now = new Date();
+
+  // Get approved + active content
+  const contents = await contentModel.getActiveApprovedContent(teacherId, now);
+
+  if (!contents.length) {
+    return {
+      success: true,
+      message: messages.CONTENT_NOT_AVAILABLE,
+      data: [],
+      statusCode: statusCodes.OK
+    };
+  }
+
+  // Group by subject
+  const grouped = {};
+
+  contents.forEach((item) => {
+    if (!grouped[item.subject]) {
+      grouped[item.subject] = [];
+    }
+    grouped[item.subject].push(item);
+  });
+
+  const result = [];
+
+  // Apply rotation per subject
+  for (const subject in grouped) {
+    const items = grouped[subject];
+
+    // sort by rotation_order
+    items.sort((a, b) => a.rotation_order - b.rotation_order);
+
+    const totalDuration = items.reduce((sum, i) => sum + i.duration, 0);
+
+    const currentSeconds = Math.floor(Date.now() / 1000);
+    const timeInCycle = currentSeconds % totalDuration;
+
+    let cumulative = 0;
+    let activeItem = null;
+
+    for (const item of items) {
+      cumulative += item.duration;
+
+      if (timeInCycle < cumulative) {
+        activeItem = item;
+        break;
+      }
+    }
+
+    if (activeItem) {
+      result.push(activeItem);
+    }
+  }
+
+  return {
+    success: true,
+    data: result,
+    statusCode: statusCodes.OK
+  };
+  }catch(err){
+    return res.status(statusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: err.message
+    });
+  }
+};
+
 module.exports = {
   uploadContent,
   getAllContent,
   getPendingContent,
   approveContent,
-  rejectContent
+  rejectContent,
+  getLiveContent
 };

@@ -87,10 +87,29 @@ const rejectContentController = async (req, res) => {
   }
 };
 
+//GET LIVE CONTENT (Public api)
+const getLiveContentController = async (req, res) => {
+  try {
+    const { teacherId } = req.params;
+
+    const response = await contentService.getLiveContent(teacherId);
+
+    return res.status(response.statusCode).json(response);
+
+  } catch (err) {
+    return res.status(statusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+
 module.exports = {
   uploadContentController,
   getAllContentController,
   getPendingContentController,
   approveContentController,
-  rejectContentController
+  rejectContentController,
+  getLiveContentController
 };

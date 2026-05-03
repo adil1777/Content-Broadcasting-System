@@ -10,7 +10,8 @@ const {
   getAllContentController,
   getPendingContentController,
   approveContentController,
-  rejectContentController
+  rejectContentController,
+  getLiveContentController
 } = require("./content.controllers");
 
 
@@ -53,6 +54,12 @@ router.put(
   authMiddleware,
   roleMiddleware(ROLES.PRINCIPAL),
   rejectContentController
+);
+
+//PUBLIC API 
+router.get(
+  "/live/:teacherId",
+  getLiveContentController
 );
 
 module.exports = router;
