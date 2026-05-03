@@ -89,7 +89,7 @@ const updateUserRole = async (userId, role) => {
 
   return {
     success: true,
-    message: MESSAGES. USER_ROLE_UPDATED,
+    message: messages.USER_ROLE_UPDATED,
     statusCode: statusCodes.OK
   };
 };
