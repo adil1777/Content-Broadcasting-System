@@ -17,7 +17,7 @@ const roleMiddleware = (...allowedRoles) => {
         message: messages.ROLE_NOT_ASSIGNED,
       });
     }
-
+    
     if (!allowedRoles.includes(req.user.role)) {
       return res.status(statusCodes.FORBIDDEN).json({
         success: false,

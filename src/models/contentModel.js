@@ -1,5 +1,6 @@
 const pool = require("../config/database");
 
+//CREATE CONTENT TABLE
 const createContentTable = async () => {
   const connection = await pool.getConnection();
   try {
@@ -60,6 +61,7 @@ const initContents = async () => {
   await createContentTable();
 };
 
+//CREATE CONTENT DATA
 const createContent = async (data) => {
   const connection = await pool.getConnection();
 
@@ -89,7 +91,58 @@ const createContent = async (data) => {
   }
 };
 
-module.exports = {
-  createContent
+// GET ALL CONTENT 
+const getAllContent = async () => {
+  const connection = await pool.getConnection();
+  try {
+    const [rows] = await connection.query("SELECT * FROM content");
+    return rows;
+  } finally {
+    connection.release();
+  }
 };
+
+// GET CONTENT BY STATUS
+const getContentByStatus = async (status) => {
+  const connection = await pool.getConnection();
+  try {
+    const [rows] = await connection.query(
+      "SELECT * FROM content WHERE status = ?",
+      [status]
+    );
+    return rows;
+  } finally {
+    connection.release();
+  }
+};
+
+// UPDATE STATUS
+const updateContentStatus = async (id, data) => {
+  const connection = await pool.getConnection();
+  try {
+    const query = `
+      UPDATE content
+      SET status = ?, approved_by = ?, approved_at = ?, rejection_reason = ?
+      WHERE id = ?
+    `;
+
+    await connection.query(query, [
+      data.status,
+      data.approved_by || null,
+      data.approved_at || null,
+      data.rejection_reason || null,
+      id
+    ]);
+  } finally {
+    connection.release();
+  }
+};
+
+module.exports = {
+  createContent,
+  getAllContent,
+  getContentByStatus,
+  updateContentStatus
+};
+
 

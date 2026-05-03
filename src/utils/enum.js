@@ -4,4 +4,13 @@ const ROLES = Object.freeze({
   STUDENT: "student",
 });
 
-module.exports = ROLES;
+const CONTENT_STATUS = Object.freeze({
+  PENDING :"pending",
+  APPROVED :"approved",
+  REJECTED : "rejected"
+})
+
+module.exports = {
+  ROLES,
+  CONTENT_STATUS
+}
