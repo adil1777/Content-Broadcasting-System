@@ -3,6 +3,7 @@ const messages = require("../utils/messages");
 const statusCodes = require("../utils/statusCodes");
 const jwt = require("jsonwebtoken");
 const serverConfig = require("../config/configServer");
+const {ROLES} = require("../utils/enum")
 
 const register = async ({ name, email, password}) => {
   const existingUser = await userModel.getUserByEmail(email);
@@ -61,7 +62,40 @@ const login = async ({ email, password }) => {
   };
 };
 
+//UPDATE USER ROLE 
+const updateUserRole = async (userId, role) => {
+
+  const allowedRoles = [ROLES.TEACHER, ROLES.STUDENT];
+
+  if (!allowedRoles.includes(role)) {
+    return {
+      success: false,
+      message: messages.ROLE_NOT_EXIST,
+      statusCode: statusCodes.BAD_REQUEST
+    };
+  }
+
+  const user = await userModel.getUserById(userId);
+
+  if (!user) {
+    return {
+      success: false,
+      message: messages.USER_NOT_FOUND,
+      statusCode: statusCodes.NOT_FOUND
+    };
+  }
+
+  await userModel.updateUserRole(userId, role);
+
+  return {
+    success: true,
+    message: MESSAGES. USER_ROLE_UPDATED,
+    statusCode: statusCodes.OK
+  };
+};
+
 module.exports = {
   register,
   login,
+  updateUserRole
 };

@@ -18,7 +18,9 @@ const messages = {
   CONTENT_REJECTED:"Content rejected successfully",
   REJECTION_REASON_REQUIRED :"Rejection reason required",
   REJECTED_REASON_REQUIRED:"Rejected reason is required",
-  CONTENT_NOT_AVAILABLE :"No content available"
+  CONTENT_NOT_AVAILABLE :"No content available",
+  ROLE_NOT_EXIST :"Invalid Role",
+  USER_ROLE_UPDATED:"User role updated successfully"
   
 };
 

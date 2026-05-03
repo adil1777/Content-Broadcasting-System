@@ -68,9 +68,24 @@ const initUsers = async () => {
   await createUsersTable();
 };
 
+//UPDATE USER ROLE 
+const updateUserRole = async (userId, role) => {
+  const connection = await pool.getConnection();
+
+  try {
+    await connection.query(
+      "UPDATE users SET role = ? WHERE id = ?",
+      [role, userId]
+    );
+  } finally {
+    connection.release();
+  }
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
   comparePassword,
+  updateUserRole
 };
